@@ -1,5 +1,9 @@
 package org.openqa.selenium.example;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,9 +17,19 @@ public class WhatsApp {
     public WebDriver driver;
 
     public WhatsApp() {
-        System.setProperty("webdriver.chrome.driver", "C:/Users/Javier/workspace_mars/MyWhatsAppSeleniumProj/chromedriver.exe");
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream input = classLoader.getResourceAsStream("config.properties");
+        Properties properties = new Properties();
+        try {
+            properties.load(input);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        System.setProperty("webdriver.chrome.driver", properties.getProperty("CHROME_DRIVER_PATH"));
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("user-data-dir=C:/Users/Javier/tmp");
+        options.addArguments("user-data-dir=" + properties.getProperty("CHROME_USER_DATA_DIR"));
         driver = new ChromeDriver(options);
     
 
