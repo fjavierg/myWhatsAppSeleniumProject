@@ -1,4 +1,4 @@
-package org.openqa.selenium.example;
+package cat.gomez.whatsapp.selenium;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

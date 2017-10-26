@@ -1,4 +1,4 @@
-package org.openqa.selenium.example;
+package cat.gomez.whatsapp.selenium;
 
 public class WhatsAppMain {
     

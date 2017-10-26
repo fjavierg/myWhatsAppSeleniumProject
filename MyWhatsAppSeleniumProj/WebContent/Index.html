@@ -6,7 +6,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha256.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/enc-base64.min.js"></script>
 </head>
 <body>
 <script>
@@ -14,59 +13,89 @@
 
 
 window.addEventListener("load", function () {
-	function hmacBase64(string, secret) {
-		var signature2 = CryptoJS.HmacSHA256(string, secret);
-		return(signature2.toString(CryptoJS.enc.Base64));
-		}
-  function sendData() {
-	  
-    var XHR = new XMLHttpRequest();
 
+  function sendDataTorch() {
+    var XHR = new XMLHttpRequest();
     // Bind the FormData object and the form element
     var FD = new FormData(form);
-
     // Define what happens on successful data submission
     XHR.addEventListener("load", function(event) {
       alert(event.target.responseText);
     });
-
     // Define what happens in case of error
     XHR.addEventListener("error", function(event) {
       alert('Oups! Something goes wrong.');
     });
-
     // Set up our request
     var url = "http://localhost:8080/MyWhatsAppSeleniumProj/WhatsApp?nb=" + form.elements["nb"].value + "&msg=" + form.elements["msg"].value;
-    var secret = "12345678";
+    var seconds = Math.round((new Date).getTime()/1000);
+    var secret = "changeit";
     XHR.open("POST", url);
-    
-    //Set autentication
-    
-    var hmac = hmacBase64(url,secret);
-    XHR.setRequestHeader("Authorization", hmac);
-
+    //Set autentication auth-schema HmacAlgorithm,TimeStampUnixEpochUTC,data(optional,Hash)
+    //Authentication: torch SHA256,1503753381,,2F05A80ECA8536AD1AC420C7D7E0BAEDAA1A5C0AFB48BDED2D3C79A123D8E6A1
+    var hmac = CryptoJS.HmacSHA256(seconds.toString(), secret).toString();
+    XHR.setRequestHeader("Authorization", "torch SHA256," + seconds + ",," + hmac);
     // The data sent is what the user provided in the form
     XHR.send(form);
   }
- 
+  function sendDataSch() {
+	    var XHR = new XMLHttpRequest();
+	    // Define what happens on successful data submission
+	    XHR.addEventListener("load", function(event) {
+	      alert(event.target.responseText);
+	    });
+	    // Define what happens in case of error
+	    XHR.addEventListener("error", function(event) {
+	      alert('Oups! Something goes wrong.');
+	    });
+	    // Set up our request
+	    var server = "http://localhost:8080";
+	    var uri = "/MyWhatsAppSeleniumProj/WhatsApp";
+	    var url = server + uri + "?nb=" + form.elements["nb"].value + "&msg=" + form.elements["msg"].value;
+	    var seconds = Math.round((new Date).getTime()/1000);
+	    var userid = "12345678";
+	    var secret = "changeit";
+	    XHR.open("POST", url);
+	    //Set autentication auth-schema HmacAlgorithm,TimeStampUnixEpochUTC,Userid,HMAC-SHA256(URI+TimeStamp)
+	    //Authentication: sch SHA256,1503753381,12345678,2F05A80ECA8536AD1AC420C7D7E0BAEDAA1A5C0AFB48BDED2D3C79A123D8E6A1
+	    var hmac = CryptoJS.HmacSHA256(uri + seconds.toString(), secret).toString();
+	    XHR.setRequestHeader("Authorization", "sch SHA256," + seconds + "," + userid + "," + hmac);
+	    // The data sent is what the user provided in the form
+	    XHR.send(form);
+	  }
   // Access the form element...
-  var form = document.getElementById("myForm");
+  var form = document.getElementById("torchForm");
 
   // ...and take over its submit event.
   form.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    sendData();
+    sendDataTorch();
+  });
+  var schform = document.getElementById("schForm");
+
+  // ...and take over its submit event.
+  schform.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    sendDataSch();
   });
 });
 </script>
 
-<form id="myForm">
+<form id="torchForm">
   <label for="nb">Destination Number (international form):</label>
   <input id=nb name="nb" value="34644016790">
   <label for="mesg">Message:</label>
   <input id=msg name="msg" value="Test">
-  <input type="submit" value="Send Me!">
+  <input type="submit" value="Send Me! torch autehntication schema">
+</form>
+<form id="schForm">
+  <label for="nb">Destination Number (international form):</label>
+  <input id=nb name="nb" value="34644016790">
+  <label for="mesg">Message:</label>
+  <input id=msg name="msg" value="Test">
+  <input type="submit" value="Send Me! sch autehntication schema">
 </form>
 </body>
 </html>

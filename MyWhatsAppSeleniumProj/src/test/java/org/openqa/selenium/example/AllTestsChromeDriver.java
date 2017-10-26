@@ -18,7 +18,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import junit.framework.TestCase;
 
 @RunWith(JUnit4.class)
-public class AllTests extends TestCase {
+public class AllTestsChromeDriver extends TestCase {
 
   private static ChromeDriverService service;
   private WebDriver driver;
@@ -55,6 +55,6 @@ public class AllTests extends TestCase {
     WebElement searchBox = driver.findElement(By.name("q"));
     searchBox.sendKeys("webdriver");
     //driver.quit();
-    assertEquals("webdriver - Google", driver.getTitle());
+    assertEquals("Google", driver.getTitle());
   }
 }
