@@ -1,8 +1,5 @@
 package cat.gomez.authentication;
 
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
-
 import javax.servlet.http.HttpServletRequest;
 
 public class AuthenticationContext {

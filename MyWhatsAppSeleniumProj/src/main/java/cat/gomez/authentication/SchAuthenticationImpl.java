@@ -35,7 +35,7 @@ public class SchAuthenticationImpl implements Authentication{
         try {
             String httpAuhorizationHeader = req.getHeader("Authorization");
             //String httpDateHeader = req.getHeader("Date");
-            String uri = req.getRequestURI();
+            final String uri = req.getRequestURI();
                     
             final String[] sp = httpAuhorizationHeader.split(" ");
             final String scheme = sp[0], credentials = sp[1];
@@ -68,7 +68,7 @@ public class SchAuthenticationImpl implements Authentication{
 
     public String generate(HashAlg alg, String data, String key) {
         final long now = System.currentTimeMillis() / 1000L;
-        String b = sign(alg,String.valueOf(now), key);
+        final String b = sign(alg,String.valueOf(now), key);
         final StringBuilder sb = new StringBuilder(b.length() + 20);
         sb.append(String.valueOf(alg)); // ALG
         sb.append(",");
@@ -90,8 +90,8 @@ public class SchAuthenticationImpl implements Authentication{
     private String sign(final HashAlg alg,final String ts, String key) {
         Mac sha256_HMAC;
         try {
+            final SecretKeySpec secret_key = new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA256");
             sha256_HMAC = Mac.getInstance("HmacSHA256");
-            SecretKeySpec secret_key = new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA256");
             sha256_HMAC.init(secret_key);
             return Hex.encodeHexString(sha256_HMAC.doFinal(ts.getBytes("UTF-8")));
         } catch (NoSuchAlgorithmException | IllegalStateException | UnsupportedEncodingException | InvalidKeyException e) {

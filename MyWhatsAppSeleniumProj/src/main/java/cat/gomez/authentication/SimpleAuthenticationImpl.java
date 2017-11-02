@@ -15,6 +15,7 @@ import java.util.Random;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.binary.Hex;
@@ -22,7 +23,7 @@ import org.apache.commons.codec.binary.Hex;
 /**
  * Simple Authentication based in HMAC an Time
  */
-public class SimpleAuth {
+public class SimpleAuthenticationImpl implements Authentication{
     /**
      * Authentication HTTP_HEADER: {@value #HTTP_HEADER}
      */
@@ -42,7 +43,7 @@ public class SimpleAuth {
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
     private int expire = DEFAULT_EXPIRE;
-    private String key = "";
+    private String key = "changeit";
 
     /**
      * Create SimpleAuth with empty Key ("") and {@link #DEFAULT_EXPIRE}
@@ -50,7 +51,7 @@ public class SimpleAuth {
      * @see #setPreSharedKey(String)
      * @see #setExpire(int)
      */
-    public SimpleAuth() {
+    public SimpleAuthenticationImpl() {
     }
 
     private static final String generateRandomKey() {
@@ -80,7 +81,7 @@ public class SimpleAuth {
      * @param key for signature / verification
      * @return this
      */
-    public SimpleAuth setPreSharedKey(final String key) {
+    public SimpleAuthenticationImpl setPreSharedKey(final String key) {
         this.key = ((key == null) ? "" : key);
         return this;
     }
@@ -90,7 +91,7 @@ public class SimpleAuth {
      * 
      * @return this
      */
-    public SimpleAuth setPreSharedKeyRandom() {
+    public SimpleAuthenticationImpl setPreSharedKeyRandom() {
         this.key = generateRandomKey();
         return this;
     }
@@ -111,7 +112,7 @@ public class SimpleAuth {
      * @param expire in seconds
      * @return this
      */
-    public SimpleAuth setExpire(final int expire) {
+    public SimpleAuthenticationImpl setExpire(final int expire) {
         if (expire <= 0) {
             throw new IllegalArgumentException("expire must be greater than 0");
         }
@@ -194,7 +195,19 @@ public class SimpleAuth {
     public boolean verify(final String signed) {
         return verify(signed, null);
     }
-
+    /**
+     * Verify signed token
+     * 
+     * @param signed data
+     * @return true if signature good
+     */
+    public boolean verify(final HttpServletRequest req) {
+        String httpAuhorizationHeader = req.getHeader("Authorization");
+                
+        final String[] sp = httpAuhorizationHeader.split(" ");
+        final String scheme = sp[0], credentials = sp[1];
+        return verify(credentials, null);
+    }
     /**
      * Verify and Decode in specified mapDecode data in signed token
      * 

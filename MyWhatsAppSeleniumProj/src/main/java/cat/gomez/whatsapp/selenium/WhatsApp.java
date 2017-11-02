@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.inject.Singleton;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,6 +19,7 @@ public class WhatsApp {
     
     public WebDriver driver;
 
+    @Singleton
     public WhatsApp() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream input = classLoader.getResourceAsStream("config.properties");
@@ -35,16 +39,24 @@ public class WhatsApp {
 
     }
     
-    public void send(String phoneNb, String message) {
+    public boolean send(String phoneNb, String message) {
         
-        driver.get("https://api.whatsapp.com/send?phone="+phoneNb+"&text="+message);
-        WebElement mySendButton = (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("action-button")));      
-        // Click Send button in API page and wait for main Whatsapp Interface page with new Send button
-        mySendButton.click();      
-        WebElement myDynamicElement = (new WebDriverWait(driver, 100))
-                .until(ExpectedConditions.presenceOfElementLocated(By.className("compose-btn-send")));        
-        myDynamicElement.click();
+        try {
+            driver.get("https://api.whatsapp.com/send?phone="+phoneNb+"&text="+message);
+
+            WebElement mySendButton = (new WebDriverWait(driver, 10))
+                    .until(ExpectedConditions.presenceOfElementLocated(By.id("action-button")));      
+            // Click Send button in API page and wait for main Whatsapp Interface page with new Send button
+            mySendButton.click();      
+            WebElement myDynamicElement = (new WebDriverWait(driver, 100))
+                    .until(ExpectedConditions.presenceOfElementLocated(By.className("compose-btn-send")));        
+            myDynamicElement.click();
+            return true;
+        }
+        catch (TimeoutException ex) {
+           System.out.println("Timeout Sending message");
+           return false;
+        }
         
     }
     

@@ -51,6 +51,13 @@ public final class AuthenticationFilter implements Filter {
                             return;
                         };
                     }
+                    if ("torch".equals(scheme)) {
+                        AuthenticationContext authenticationContext=new AuthenticationContext(new SimpleAuthenticationImpl());
+                        if (authenticationContext.executeVerify(req)) {
+                            chain.doFilter(request, response);
+                            return;
+                        };
+                    }
                 }
             }
             if (!res.isCommitted()) {
