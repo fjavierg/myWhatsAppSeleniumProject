@@ -15,12 +15,12 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class WhatsApp {
+public class WhatsAppOld {
     
     public WebDriver driver;
 
     @Singleton
-    public WhatsApp() {
+    public WhatsAppOld() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream input = classLoader.getResourceAsStream("config.properties");
         Properties properties = new Properties();

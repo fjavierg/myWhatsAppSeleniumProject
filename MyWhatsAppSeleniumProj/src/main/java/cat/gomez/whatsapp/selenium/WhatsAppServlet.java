@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -62,7 +61,9 @@ public class WhatsAppServlet extends HttpServlet {
                   MessageProducer producer = session.createProducer(destination);
 
                   try {
-                      TextMessage message = session.createTextMessage(msg);
+                      MapMessage message = session.createMapMessage();
+                      message.setString("nb", nb);
+                      message.setString("msg", msg);
                       producer.send(message);
                       writer.println("Message sent! ^__^");
                   } finally {

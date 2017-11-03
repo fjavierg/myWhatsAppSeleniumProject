@@ -1,8 +1,14 @@
 package cat.gomez.whatsapp.selenium;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -13,15 +19,25 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-@Singleton
+@ApplicationScoped
 public class WhatsApp {
     
-    public WebDriver driver;
-    public ChromeOptions options = new ChromeOptions();
+    @Inject
+    @Property("CHROME_DRIVER_PATH")
+    private String chromeDriverPath;
+    @Inject
+    @Property("CHROME_USER_DATA_DIR")
+    private String chromeUserDataDir;
+    private WebDriver driver;
+    private ChromeOptions options = new ChromeOptions();
 
     public WhatsApp() {
-        System.setProperty("webdriver.chrome.driver", "C:/Users/Javier/git/myWhatsAppSeleniumProject/MyWhatsAppSeleniumProj/chromedriver.exe");        
-        options.addArguments("user-data-dir=" + "C:/Users/Javier/tmp");
+    }
+    
+    @PostConstruct
+    public void init () {
+        System.setProperty("webdriver.chrome.driver",chromeDriverPath);        
+        options.addArguments("user-data-dir=" + chromeUserDataDir);
         driver = new ChromeDriver(options);
     }
     
@@ -46,8 +62,9 @@ public class WhatsApp {
                System.out.println("Timeout Sending message");
                if (++count == maxTries) throw ex;
             }
-            catch (WebDriverException ex) {
+            catch (NoSuchSessionException ex) {
                 System.out.println("Driver communication problem");
+                driver.close();
                 driver = new ChromeDriver(options);
                 if (++count == maxTries) throw ex;
              }
@@ -57,5 +74,11 @@ public class WhatsApp {
              }
         }
     }
+
     
+    @PreDestroy
+    public void dispose() {
+        System.out.println("@PreDestroy is called...");
+        driver.close();
+    }
 }

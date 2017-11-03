@@ -51,7 +51,7 @@ window.addEventListener("load", function () {
 	    // Set up our request
 	    var server = "http://localhost:8080";
 	    var uri = "/MyWhatsAppSeleniumProj/WhatsApp";
-	    var url = server + uri + "?nb=" + form.elements["nb"].value + "&msg=" + form.elements["msg"].value;
+	    var url = server + uri + "?nb=" + schform.elements["nb"].value + "&msg=" + schform.elements["msg"].value;
 	    var seconds = Math.round((new Date).getTime()/1000);
 	    var userid = "12345678";
 	    var secret = "changeit";
@@ -82,20 +82,27 @@ window.addEventListener("load", function () {
   });
 });
 </script>
-
+<H1>WhatsApp API test page</H1>
+<p>Sends http request to send a whatsapp message to a destination using http API.</p>
+<p> Javascript AJAX request signed and sent to server</p>
+<h2>Test API using torch authentication scheme</h2>
+<div>
 <form id="torchForm">
-  <label for="nb">Destination Number (international form):</label>
+  <label for="nb">Destination Number (international format):</label>
   <input id=nb name="nb" value="34644016790">
   <label for="mesg">Message:</label>
   <input id=msg name="msg" value="Test">
   <input type="submit" value="Send Me! torch autehntication schema">
 </form>
-<form id="schForm">
-  <label for="nb">Destination Number (international form):</label>
+</div>
+<h2>Test API using sch authentication scheme</h2>
+<div><form id="schForm">
+  <label for="nb">Destination Number (international format):</label>
   <input id=nb name="nb" value="34644016790">
   <label for="mesg">Message:</label>
   <input id=msg name="msg" value="Test">
   <input type="submit" value="Send Me! sch autehntication schema">
 </form>
+</div>
 </body>
 </html>

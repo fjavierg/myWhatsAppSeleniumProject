@@ -1,15 +1,16 @@
 Servlet to send WhatsApp messages
 
-This application provides a HTTP interface to send whatsapp text messages to any destination using a mobile phone connected via web whatsapp.
+This application provides a HTTP interface to send whatsapp text messages using a mobile phone connected via web whatsapp.
 
 
 Usage
 
-	Deploy war in servlet container (WildFly 10 or Tomcat)
+	Deploy war in servlet container (WildFly 10 or Tomcat) or deploy ear in JEE container for JMS version (wildfly 10)
 	
-	HTTP API http://localhost:8080/MySelenium20Proj/WhatsApp?nb=<nb in international format>&msg=<text message to be sent>	(Only for testing, requires deactivation of authentication filter)
-	 or
 	open Index.html file. Fill in form and click send button
+	   OR
+	HTTP API http://localhost:8080/MySelenium20Proj/WhatsApp?nb=<nb in international format>&msg=<text message to be sent>	(Only for testing, requires deactivation of authentication filter)
+
 	
 	First Chrome execution requires to scan the QR code in web browser with the whatsapp application in the mobile phone.
 
@@ -21,6 +22,7 @@ Details
 	Clicks on send button and send icon to fulfill the sending process using Selenium
 	Http API authentication using several schemas based on HMAC signatures in HTTP Authentication header (Strategy design pattern)
 	Flexible Users repository (DAO design pattern)
+	JMS queues for asynchronous comm.
 	
 Configuration
 	Set config.properties values for Selenium Chrome Driver path and Chrome user-data-dir too store chrome settings
@@ -33,9 +35,10 @@ Authentication schemas:
 
 Artifacts
 
-	WhatsAppServlet. Servlet that receives the request and calls WhastApp.send method to send the message
-	WhatsApp class Constructor to start Chrome browser and send method
-	index.html Basic HTML/javascript form send whatsapp messages using HTTP interface.
+	WhatsAppServlet. Servlet that receives the request and calls WhastApp.send method to send the message to JMS queue
+	WhatsAppMDBean Message driven bean to consume JMS messages
+	WhatsApp class Singleton Bean to start Chrome browser, send method using Selenium and destroy browser
+	index.html Basic HTML/javascript form to send whatsapp messages using HTTP interface. Implements two authentication schemas
 	Authentication, AuthenticationContext, SchAuthentication and AuthenticationFilter classes for client authentication  
 	User, UserDao and UserDaoImpl classes for users persistance,
 	CORSFilter, servlet filter for cross-origin resource sharing
