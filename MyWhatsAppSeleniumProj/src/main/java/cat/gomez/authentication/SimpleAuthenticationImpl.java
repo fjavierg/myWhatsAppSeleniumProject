@@ -1,7 +1,6 @@
 package cat.gomez.authentication;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
@@ -16,8 +15,6 @@ import java.util.Random;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
-
 import org.apache.commons.codec.binary.Hex;
 
 /**
@@ -240,45 +237,6 @@ public class SimpleAuthenticationImpl implements Authentication{
 
 
     /**
-     * Hex decoding
-     * 
-     * @param input string
-     * @return
-     */
-    private byte[] decodeHex(final String input) {
-        return DatatypeConverter.parseHexBinary(input);
-    }
-
-    /**
-     * Hex encoding
-     * 
-     * @param input buffer
-     * @return
-     */
-    private static String encodeHex(final byte[] input) {
-        return DatatypeConverter.printHexBinary(input);
-    }
-
-    /**
-     * Long to byte[]
-     * 
-     * @param value
-     * @return
-     */
-    private static final byte[] longToByteArray(final long value) {
-        return new byte[] {
-                (byte) (value >>> 56), //
-                (byte) (value >>> 48), //
-                (byte) (value >>> 40),  //
-                (byte) (value >>> 32), //
-                (byte) (value >>> 24), //
-                (byte) (value >>> 16), //
-                (byte) (value >>> 8),  //
-                (byte) value
-        };
-    }
-
-    /**
      * Signature
      * 
      * @param alg
@@ -296,13 +254,7 @@ public class SimpleAuthenticationImpl implements Authentication{
         return Hex.encodeHexString(sha256_HMAC.doFinal(ts.getBytes("UTF-8")));
 
     }
-    private byte[] sign_old(final HashAlg alg, final byte[] buf, final long ts) throws GeneralSecurityException {
-        final Mac m = alg.getMac();
-        m.init(new SecretKeySpec(key.getBytes(UTF8), m.getAlgorithm()));
-        m.update(longToByteArray(ts));
-        m.update(buf);
-        return m.doFinal();
-    }
+
     /**
      * Like application/x-www-form-urlencoded
      * 
@@ -327,50 +279,7 @@ public class SimpleAuthenticationImpl implements Authentication{
         return sb.toString();
     }
 
-    /**
-     * Like application/x-www-form-urlencoded
-     * 
-     * @param data to decode
-     * @return
-     * @throws UnsupportedEncodingException
-     */
-    private static void decodeMap(final String data, final Map<String, String> map)
-            throws UnsupportedEncodingException {
-        final char[] buf = data.toCharArray();
-        if ((buf == null) || (buf.length <= 0)) {
-            return;
-        }
-        final StringBuilder sb = new StringBuilder();
-        final int len = buf.length;
-        boolean readValue = false; // finding = (reading key)
-        String key = "", value = "";
-        for (int i = 0; i < len; i++) {
-            final char c = buf[i];
-            if (c == '=') {
-                key = URLDecoder.decode(sb.toString(), "UTF-8");
-                value = "";
-                sb.setLength(0);
-                readValue = true; // finding & (reading value)
-            } else if (c == '&') {
-                value = URLDecoder.decode(sb.toString(), "UTF-8");
-                sb.setLength(0);
-                map.put(key, value);
-                key = value = "";
-                readValue = false;
-            } else {
-                sb.append(c);
-            }
-        }
-        if (sb.length() > 0) {
-            if (readValue) {
-                value = URLDecoder.decode(sb.toString(), "UTF-8");
-            } else {
-                key = URLDecoder.decode(sb.toString(), "UTF-8");
-            }
-            sb.setLength(0);
-            map.put(key, value);
-        }
-    }
+
 
     public static enum HashAlg {
         /**
