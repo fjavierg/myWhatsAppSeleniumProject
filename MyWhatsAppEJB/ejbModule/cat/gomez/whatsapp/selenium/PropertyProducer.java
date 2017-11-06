@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 public class PropertyProducer {
+    private static final String PROPERTIES_FILE = "/config.properties";
     private Properties properties;
     @Property
     @Produces
@@ -38,7 +39,7 @@ public class PropertyProducer {
     public void init() {
         this.properties = new Properties();
         final InputStream stream = PropertyProducer.class
-                                      .getResourceAsStream("/config.properties");
+                                      .getResourceAsStream(PROPERTIES_FILE);
         if (stream == null) {
             throw new RuntimeException("No properties!!!");
         }

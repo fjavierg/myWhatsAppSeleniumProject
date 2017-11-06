@@ -61,6 +61,7 @@ public class SchAuthenticationImpl implements Authentication{
                 return true;
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }

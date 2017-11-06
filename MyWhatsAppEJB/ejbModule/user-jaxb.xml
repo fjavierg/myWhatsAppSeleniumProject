@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<users>
+    <user>
+        <id>12345678</id>
+        <secret>changeit</secret>
+    </user>
+    <user>
+        <id>87654321</id>
+        <secret>changeit</secret>
+    </user>
+</users>
