@@ -28,7 +28,7 @@ window.addEventListener("load", function () {
       alert('Oups! Something goes wrong.');
     });
     // Set up our request
-    var url = "http://localhost:8080/MyWhatsAppSeleniumProj/WhatsApp?nb=" + form.elements["nb"].value + "&msg=" + form.elements["msg"].value;
+    var url = "http://localhost:8080/MySel20Proj/WhatsApp?nb=" + form.elements["nb"].value + "&msg=" + form.elements["msg"].value;
     var seconds = Math.round((new Date).getTime()/1000);
     var secret = "changeit";
     XHR.open("POST", url);
