@@ -15,7 +15,7 @@
 var USER_ID = "12345678";
 var USER_SECRET = "changeit"
 var SERVER = "http://localhost:8080";
-var URI = "/MyWhatsAppSeleniumProj/WhatsApp";
+var URI = "/MySel20Proj/WhatsApp";
 
 function sendWhatsAppMsg(destinationNb, message) {
 	

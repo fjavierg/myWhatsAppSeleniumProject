@@ -37,11 +37,15 @@
 	      	<version>10.1.1.Final</version>
 	      	<type>pom</type>
 	      </dependency>
+	      <dependency>
+	      	<groupId>org.slf4j</groupId>
+	      	<artifactId>slf4j-api</artifactId>
+	      	<version>1.7.7</version>
+      	</dependency>
         </dependencies>
   <build>
       <!-- Set the name of the war, used as the context root when the app 
          is deployed -->
-      <finalName>${project.artifactId}</finalName>
       <plugins>
          <plugin>
             <artifactId>maven-war-plugin</artifactId>
