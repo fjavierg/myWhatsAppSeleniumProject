@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Hex;
 
+import cat.gomez.whatsapp.model.UserDao;
+import cat.gomez.whatsapp.model.UserDaoImplXML;
+
 /**
  * Authentication based in HMAC an Time
  * 

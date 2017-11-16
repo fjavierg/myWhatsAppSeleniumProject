@@ -1,4 +1,4 @@
-package cat.gomez.authentication;
+package cat.gomez.whatsapp.model;
 
 import java.util.List;
 

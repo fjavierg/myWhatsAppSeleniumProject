@@ -8,4 +8,8 @@
         <id>87654321</id>
         <secret>changeit</secret>
     </user>
+    <user>
+        <secret>xxxx</secret>
+        <userid>9999</userid>
+    </user>
 </users>

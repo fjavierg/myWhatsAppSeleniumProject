@@ -1,23 +1,23 @@
-package cat.gomez.authentication;
+package cat.gomez.whatsapp.model;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 public class UserDaoMain {
 
-    private static final String BOOKSTORE_XML = "./src/main/resources/user-jaxb.xml";
-
-    public static void main(String[] args) throws JAXBException, FileNotFoundException {
+    public static void main(String[] args) {
+        
+        UserDao mydao = new UserDaoImplXML();
+        
+        List<User> mylist = mydao.getAllUsers();       
+        System.out.println("Output from our XML File: " + mylist.toString());
+        
+        User user1 = new User("9999","xxxx");
+        mydao.addUser(user1);
+        
+        mylist = mydao.getAllUsers();       
+        System.out.println("Output from our XML File: " + mylist.toString());
  
-        ArrayList<User> users = new ArrayList<User>();
+/*        ArrayList<User> users = new ArrayList<User>();
 
         // create books
         User user1 = new User("12345678","changeit");
@@ -52,6 +52,7 @@ public class UserDaoMain {
             System.out.println("User:: " + user.getId() + " secret "
                     + user.getSecret());
         }
+*/
     }
 
 }
