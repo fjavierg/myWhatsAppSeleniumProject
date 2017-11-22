@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
-public interface UserDao {
-   public List<User> getAllUsers();
-   public User getUser(String id);
-   public void addUser(User user);
-   public void updateUser(User user);
-   public void deleteUser(User user);
+public interface UserDao extends IGenericDao<User> {
+
+    User getUser(String id);
+
 }

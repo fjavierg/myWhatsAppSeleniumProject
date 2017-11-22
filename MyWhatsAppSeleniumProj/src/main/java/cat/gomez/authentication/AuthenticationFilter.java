@@ -15,21 +15,6 @@ public final class AuthenticationFilter implements Filter {
 
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
-/*        sa = new SimpleAuth();
-        // key
-        final String cfg_key = filterConfig.getInitParameter("pre-shared-key");
-        if (cfg_key == null) {
-            throw new ServletException("Invalid key (null) for " + getClass().getName());
-        }
-        sa.setPreSharedKey(cfg_key);
-        // expire
-        final String cfg_tokenExpire = filterConfig.getInitParameter("token-expire");
-        if (cfg_tokenExpire != null) {
-            final int expire = Integer.parseInt(cfg_tokenExpire);
-            if (expire > 0) {
-                sa.setExpire(expire);
-            }
-        }*/
     }
 
     @Override

@@ -5,10 +5,13 @@
 
         <!-- Entity classes -->
         <class>cat.gomez.whatsapp.model.User</class>
+        <class>cat.gomez.whatsapp.model.DistributionList</class>
+        <class>cat.gomez.whatsapp.model.Member</class>
+        <class>cat.gomez.whatsapp.model.Bulletin</class>
 
 		<properties>
 			<property name="hibernate.archive.autodetection" value="class" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
 			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
 			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/whatsappapi" />
 			<property name="hibernate.connection.username" value="whatsapp" />

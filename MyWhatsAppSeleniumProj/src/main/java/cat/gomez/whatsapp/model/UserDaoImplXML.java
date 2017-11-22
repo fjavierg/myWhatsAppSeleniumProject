@@ -11,12 +11,15 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import cat.gomez.whatsapp.model.PersistenceImplementation.PersistenceType;
+
+@PersistenceImplementation(PersistenceType.XML)
 public class UserDaoImplXML implements UserDao {
     
     private static final String USERSTORE_XML = "C:\\Users\\Javier\\git\\myWhatsAppSeleniumProject\\MyWhatsAppSeleniumProj\\src\\main\\resources\\user-jaxb.xml";
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> findAll() {
      // create JAXB context and instantiate marshaller
         try {
             JAXBContext context = JAXBContext.newInstance(Users.class);
@@ -34,10 +37,10 @@ public class UserDaoImplXML implements UserDao {
     @Override
     public User getUser(String id) {
         List<User> list;
-        list = this.getAllUsers();
+        list = this.findAll();
 
         Optional<User> user = list.stream()
-                .filter(myuser -> myuser.getId().equals(id))
+                .filter(myuser -> myuser.getUserid().equals(id))
                 .findFirst();
         if (user.isPresent()) {
             return user.get();
@@ -47,9 +50,9 @@ public class UserDaoImplXML implements UserDao {
     }
 
     @Override
-    public void addUser(User user)  {
+    public void create(User user)  {
         
-        List<User> users = this.getAllUsers();
+        List<User> users = this.findAll();
         users.add(user);
         
         try {
@@ -69,15 +72,29 @@ public class UserDaoImplXML implements UserDao {
     }
     
     @Override
-    public void updateUser(User user) {
+    public User update(User user) {
+        // TODO Auto-generated method stub
+        return null;
+
+    }
+
+    @Override
+    public void delete(User user) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void deleteUser(User user) {
+    public User findOne(Long id) {
         // TODO Auto-generated method stub
-
+        return null;
     }
+
+    @Override
+    public void setClazz(Class<User> clazzToSet) {
+        // TODO Auto-generated method stub
+        
+    }
+
 
 }

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <users>
     <user>
-        <id>12345678</id>
+        <id>1</id>
+        <userid>12345678</userid>
         <secret>changeit</secret>
     </user>
     <user>
-        <id>87654321</id>
+        <id>2</id>
+        <userid>87654321</userid>
         <secret>changeit</secret>
-    </user>
-    <user>
-        <secret>xxxx</secret>
-        <userid>9999</userid>
     </user>
 </users>

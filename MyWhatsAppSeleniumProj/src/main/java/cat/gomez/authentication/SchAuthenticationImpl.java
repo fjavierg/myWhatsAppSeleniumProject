@@ -6,12 +6,16 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Hex;
 
+import cat.gomez.whatsapp.model.PersistenceImplementation;
 import cat.gomez.whatsapp.model.UserDao;
+import cat.gomez.whatsapp.model.UserDaoImplSQL;
 import cat.gomez.whatsapp.model.UserDaoImplXML;
+import cat.gomez.whatsapp.model.PersistenceImplementation.PersistenceType;
 
 /**
  * Authentication based in HMAC an Time
@@ -29,6 +33,7 @@ public class SchAuthenticationImpl implements Authentication{
     public static final int DEFAULT_EXPIRE = (5 * 60);
 
     private int expire = DEFAULT_EXPIRE;
+
 
     private UserDao userDao = new UserDaoImplXML();
 

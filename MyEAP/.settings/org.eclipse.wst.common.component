@@ -6,7 +6,7 @@
             <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="MySel20Proj.war" deploy-path="/" handle="module:/resource/MyWhatsAppSeleniumProj/MyWhatsAppSeleniumProj">
+        <dependent-module archiveName="MySel20Proj-0.0.1-SNAPSHOT.war" deploy-path="/" handle="module:/resource/MyWhatsAppSeleniumProj/MyWhatsAppSeleniumProj">
             <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
