@@ -1,9 +1,8 @@
 package cat.gomez.whatsapp.rest;
 
-
 import java.net.URI;
 import java.util.Collection;
- 
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,19 +22,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import cat.gomez.whatsapp.model.DistributionList;
 import cat.gomez.whatsapp.model.User;
- 
- 
-@Path("/item")
+
+@Path("/distributionlist")
 @Produces ({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Consumes ({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Stateless
-public class UserRESTService {
-    //the PersistenceContext annotation is a shortcut that hides the fact
-    //that, an entity manager is always obtained from an EntityManagerFactory.
-    //The peristitence.xml file defines persistence units which is supplied by name
-    //to the EntityManagerFactory, thus  dictating settings and classes used by the
-    //entity manager
+public class DistributionListRESTService {
+
     @PersistenceContext(unitName = "MyWhatsAppSeleniumProj")
     private EntityManager em;
  
@@ -44,72 +39,77 @@ public class UserRESTService {
     private UriInfo uriInfo;
  
     @POST
-    public Response createUser(User user){
-        if(user == null){
+    @Path("{userid}")
+    public Response createDistributionList(DistributionList dl,@PathParam("userid") String userid){
+        if(dl == null){
             throw new BadRequestException();
         }
-        em.persist(user);
+        em.persist(dl);
  
         //Build a uri with the Item id appended to the absolute path
         //This is so the client gets the Item id and also has the path to the resource created
-        URI userUri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getUserid())).build();
+        URI dlUri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(dl.getName())).build();
  
         //The created response will not have a body. The itemUri will be in the Header
-        return Response.created(userUri).build();
+        return Response.created(dlUri).build();
     }
  
     @GET
-    @Path("{id}")
-    public Response getUser(@PathParam("id") String userid){
-        User user = (User)em.createNamedQuery("findUserByUserid")
+    @Path("{userid}")
+    public Collection<DistributionList> getDistributionsList(@PathParam("userid") String userid){
+        
+        TypedQuery<DistributionList> query = em.createNamedQuery("findDLByUserid", DistributionList.class)
+                .setParameter("userid", userid);
+        return query.getResultList();
+    }
+    
+    @GET
+    @Path("{userid}/{dlname}")
+    public Response getDistributionList(@PathParam("userid") String userid, @PathParam("dlname") String dlname){
+        DistributionList dl = (DistributionList)em.createNamedQuery("findDlByName")
                 .setParameter("userid", userid)
+                .setParameter("name", dlname)
                 .getSingleResult();
  
-        if(user == null){
+        if(dl == null){
             throw new NotFoundException();
         }
  
-        return Response.ok(user).build();
+        return Response.ok(dl).build();
     }
  
-    //Response.ok() does not accept collections
-    //But we return a collection and JAX-RS will generate header 200 OK and
-    //will handle converting the collection to xml or json as the body
-    @GET
-    public Collection<User> getUsers(){
-        
-        TypedQuery<User> query = em.createNamedQuery("findAll", User.class);
-        return query.getResultList();
-    }
  
     @PUT
-    @Path("{id}")
-    public Response updateUser(User user, @PathParam("id") String userid){
-        User existingUser = (User)em.createNamedQuery("findUserByUserid")
+    @Path("{userid}/{dlname}")
+    public Response updateDistributionList(DistributionList dl, @PathParam("userid") String userid, @PathParam("dlname") String dlname){
+        DistributionList existingDl = (DistributionList)em.createNamedQuery("findDlByName")
                 .setParameter("userid", userid)
-                .getSingleResult();
+                .setParameter("name", dlname)
+                .getSingleResult();;
  
-        if(existingUser == null){
+        if(existingDl == null){
             throw new NotFoundException();
         }
  
         //Ideally we should check the id is a valid UUID. Not implementing for now
         //user.setId(id);
-        em.merge(user);
+        em.merge(dl);
  
         return Response.ok().build();
     }
  
     @DELETE
-    @Path("{id}")
-    public Response deleteUser(@PathParam("id") String userid){
-        User user = (User)em.createNamedQuery("findUserByUserid")
+    @Path("{userid}/{dlname}")
+    public Response deleteDistributionList(@PathParam("userid") String userid, @PathParam("dlname") String dlname){
+        DistributionList dl = (DistributionList)em.createNamedQuery("findDlByName")
                 .setParameter("userid", userid)
+                .setParameter("name", dlname)
                 .getSingleResult();
-        if(user == null){
+ 
+        if(dl == null){
             throw new NotFoundException();
         }
-        em.remove(user);
+        em.remove(dl);
         return Response.noContent().build();
     }
  

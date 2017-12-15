@@ -8,10 +8,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Index;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @Entity
+@Table(indexes = {@Index(name = "dlid", columnList = "name,owner_id", unique=true)})
+@NamedQueries({
+    @NamedQuery(
+            name="findDLByName",
+            query="SELECT mydl FROM DistributionList mydl WHERE mydl.owner = :userid AND mydl.name = :name"
+        ),
+    @NamedQuery(
+            name="findDLByUserid",
+            query="SELECT mydl FROM DistributionList mydl WHERE mydl.owner = :userid"
+        ) 
+})
 public class DistributionList {
     @Id
     @GeneratedValue

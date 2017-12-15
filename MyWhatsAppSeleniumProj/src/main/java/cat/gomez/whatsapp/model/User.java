@@ -11,9 +11,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @NamedQueries({
     @NamedQuery(
@@ -34,7 +38,9 @@ public class User implements Serializable {
     private String userid;
     @Column(name = "secret", nullable = false, columnDefinition = "varchar(255)")
     private String secret;
+    @XmlElement
     private Date created;
+    @XmlElement
     private Date updated;
 
     @PrePersist
