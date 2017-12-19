@@ -42,6 +42,11 @@
 	      	<artifactId>slf4j-api</artifactId>
 	      	<version>1.7.7</version>
       	</dependency>
+	      <dependency>
+	      	<groupId>ai.api</groupId>
+	      	<artifactId>libai</artifactId>
+	      	<version>1.6.12</version>
+	      </dependency>
         </dependencies>
   <build>
       <!-- Set the name of the war, used as the context root when the app 
